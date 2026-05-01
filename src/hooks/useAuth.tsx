@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchProfile = useCallback(async (userId: string) => {
     const { data } = await supabase.from("profiles").select("full_name, role, location, phone").eq("id", userId).single();
-    if (data) setProfile(data);
+    if (data) setProfile({ full_name: data.full_name, role: data.role, location: data.location ?? "", phone: data.phone ?? "" });
   }, []);
 
   const refreshProfile = useCallback(async () => {
