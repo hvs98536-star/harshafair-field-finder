@@ -1,4 +1,6 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 import appCss from "../styles.css?url";
 
@@ -43,6 +45,14 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -65,5 +75,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isDashboard = pathname.startsWith("/dashboard");
+
+  return (
+    <>
+      {!isDashboard && <Navbar />}
+      <main className={!isDashboard ? "pt-16" : ""}>
+        <Outlet />
+      </main>
+      {!isDashboard && <Footer />}
+    </>
+  );
 }
