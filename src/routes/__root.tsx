@@ -1,6 +1,8 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { AuthProvider } from "@/hooks/useAuth";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -77,14 +79,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isDashboard = pathname.startsWith("/dashboard");
+  const isLogin = pathname === "/login";
 
   return (
-    <>
-      {!isDashboard && <Navbar />}
-      <main className={!isDashboard ? "pt-16" : ""}>
+    <AuthProvider>
+      {!isDashboard && !isLogin && <Navbar />}
+      <main className={!isDashboard && !isLogin ? "pt-16" : ""}>
         <Outlet />
       </main>
-      {!isDashboard && <Footer />}
-    </>
+      {!isDashboard && !isLogin && <Footer />}
+      <Toaster />
+    </AuthProvider>
   );
 }
