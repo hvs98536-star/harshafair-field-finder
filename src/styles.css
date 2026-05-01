@@ -9,14 +9,6 @@
  * Earthy greens, warm golds, clean whites
  */
 
-@font-face {
-  font-family: 'DM Sans';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-}
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
