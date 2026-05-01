@@ -33,14 +33,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Farmora" },
+      { name: "description", content: "Farm Direct Connect links farmers directly to buyers for fair prices and transparent transactions." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Farmora" },
+      { property: "og:description", content: "Farm Direct Connect links farmers directly to buyers for fair prices and transparent transactions." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Farmora" },
+      { name: "twitter:description", content: "Farm Direct Connect links farmers directly to buyers for fair prices and transparent transactions." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VZEcQfMhg3Q4zMwthE2wtEDtM9C3/social-images/social-1777618654980-Firefly_Gemini_Flash_Create_a_website_hero_background_for_a_SaaS_product._Theme-_Sell_Your_Crops_at_the_Pr_307699.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VZEcQfMhg3Q4zMwthE2wtEDtM9C3/social-images/social-1777618654980-Firefly_Gemini_Flash_Create_a_website_hero_background_for_a_SaaS_product._Theme-_Sell_Your_Crops_at_the_Pr_307699.webp" },
     ],
     links: [
       {
