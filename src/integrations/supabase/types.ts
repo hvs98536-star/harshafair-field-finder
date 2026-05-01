@@ -14,7 +14,137 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      crop_listings: {
+        Row: {
+          available_date: string | null
+          created_at: string
+          crop_name: string
+          farmer_id: string
+          id: string
+          location: string
+          notes: string | null
+          price: string
+          quantity: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          available_date?: string | null
+          created_at?: string
+          crop_name: string
+          farmer_id: string
+          id?: string
+          location?: string
+          notes?: string | null
+          price: string
+          quantity: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          available_date?: string | null
+          created_at?: string
+          crop_name?: string
+          farmer_id?: string
+          id?: string
+          location?: string
+          notes?: string | null
+          price?: string
+          quantity?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crop_listings_farmer_id_fkey"
+            columns: ["farmer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          buyer_id: string
+          created_at: string
+          id: string
+          listing_id: string
+          message: string | null
+          offered_price: string
+          offered_qty: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string
+          id?: string
+          listing_id: string
+          message?: string | null
+          offered_price: string
+          offered_qty: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string
+          id?: string
+          listing_id?: string
+          message?: string | null
+          offered_price?: string
+          offered_qty?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offers_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "crop_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          location: string | null
+          phone: string | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string
+          id: string
+          location?: string | null
+          phone?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          location?: string | null
+          phone?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
