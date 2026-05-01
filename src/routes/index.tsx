@@ -1,26 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeroSection } from "@/components/HeroSection";
+import { FeaturesSection } from "@/components/FeaturesSection";
+import { HowItWorksSection } from "@/components/HowItWorksSection";
+import { CTASection } from "@/components/CTASection";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Farmora — Fair Prices. Direct Markets. Better Farming." },
+      { name: "description", content: "Direct farmer-to-buyer marketplace. Sell crops at fair prices with no middlemen." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return (
+    <>
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <CTASection />
+    </>
+  );
 }
