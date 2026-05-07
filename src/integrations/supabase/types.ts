@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      buyer_requests: {
+        Row: {
+          buyer_id: string
+          created_at: string
+          crop_name: string
+          id: string
+          image_urls: string[]
+          location: string
+          notes: string | null
+          offer_price: string
+          quantity_needed: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string
+          crop_name: string
+          id?: string
+          image_urls?: string[]
+          location?: string
+          notes?: string | null
+          offer_price: string
+          quantity_needed: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string
+          crop_name?: string
+          id?: string
+          image_urls?: string[]
+          location?: string
+          notes?: string | null
+          offer_price?: string
+          quantity_needed?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       crop_listings: {
         Row: {
           available_date: string | null
@@ -21,6 +63,7 @@ export type Database = {
           crop_name: string
           farmer_id: string
           id: string
+          image_urls: string[]
           location: string
           notes: string | null
           price: string
@@ -34,6 +77,7 @@ export type Database = {
           crop_name: string
           farmer_id: string
           id?: string
+          image_urls?: string[]
           location?: string
           notes?: string | null
           price: string
@@ -47,6 +91,7 @@ export type Database = {
           crop_name?: string
           farmer_id?: string
           id?: string
+          image_urls?: string[]
           location?: string
           notes?: string | null
           price?: string
@@ -117,30 +162,45 @@ export type Database = {
       }
       profiles: {
         Row: {
+          business_name: string | null
           created_at: string
+          district: string | null
+          farming_type: string | null
           full_name: string
           id: string
           location: string | null
           phone: string | null
+          profile_image_url: string | null
           role: string
+          state: string | null
           updated_at: string
         }
         Insert: {
+          business_name?: string | null
           created_at?: string
+          district?: string | null
+          farming_type?: string | null
           full_name?: string
           id: string
           location?: string | null
           phone?: string | null
+          profile_image_url?: string | null
           role?: string
+          state?: string | null
           updated_at?: string
         }
         Update: {
+          business_name?: string | null
           created_at?: string
+          district?: string | null
+          farming_type?: string | null
           full_name?: string
           id?: string
           location?: string | null
           phone?: string | null
+          profile_image_url?: string | null
           role?: string
+          state?: string | null
           updated_at?: string
         }
         Relationships: []
