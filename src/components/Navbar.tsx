@@ -17,9 +17,9 @@ export function Navbar() {
 
           <div className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Home</Link>
-            <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Login</Link>
+            <Link to="/auth" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Login</Link>
             <Button asChild variant="hero" size="default">
-              <Link to="/login">Get Started</Link>
+              <Link to="/auth">Get Started</Link>
             </Button>
           </div>
 
@@ -31,9 +31,9 @@ export function Navbar() {
         {open && (
           <div className="md:hidden pb-4 flex flex-col gap-3">
             <Link to="/" className="text-sm font-medium text-muted-foreground" onClick={() => setOpen(false)}>Home</Link>
-            <Link to="/login" className="text-sm font-medium text-muted-foreground" onClick={() => setOpen(false)}>Login</Link>
+            <Link to="/auth" className="text-sm font-medium text-muted-foreground" onClick={() => setOpen(false)}>Login</Link>
             <Button asChild variant="hero" size="default">
-              <Link to="/login" onClick={() => setOpen(false)}>Get Started</Link>
+              <Link to="/auth" onClick={() => setOpen(false)}>Get Started</Link>
             </Button>
           </div>
         )}

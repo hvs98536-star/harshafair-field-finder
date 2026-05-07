@@ -19,10 +19,10 @@ export function CTASection() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button asChild size="xl" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold rounded-xl">
-              <Link to="/login">Start Selling</Link>
+              <Link to="/auth">Start Selling</Link>
             </Button>
             <Button asChild size="xl" className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 font-semibold rounded-xl bg-transparent">
-              <Link to="/login">Browse Crops</Link>
+              <Link to="/auth">Browse Crops</Link>
             </Button>
           </div>
         </motion.div>
