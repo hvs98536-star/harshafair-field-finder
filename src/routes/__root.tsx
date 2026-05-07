@@ -1,8 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { AuthProvider } from "@/hooks/useAuth";
-import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -33,18 +31,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Farmora" },
-      { name: "description", content: "Farm Direct Connect links farmers directly to buyers for fair prices and transparent transactions." },
+      { title: "Lovable App" },
+      { name: "description", content: "Lovable Generated Project" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Farmora" },
-      { property: "og:description", content: "Farm Direct Connect links farmers directly to buyers for fair prices and transparent transactions." },
+      { property: "og:title", content: "Lovable App" },
+      { property: "og:description", content: "Lovable Generated Project" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Farmora" },
-      { name: "twitter:description", content: "Farm Direct Connect links farmers directly to buyers for fair prices and transparent transactions." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VZEcQfMhg3Q4zMwthE2wtEDtM9C3/social-images/social-1777618654980-Firefly_Gemini_Flash_Create_a_website_hero_background_for_a_SaaS_product._Theme-_Sell_Your_Crops_at_the_Pr_307699.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/VZEcQfMhg3Q4zMwthE2wtEDtM9C3/social-images/social-1777618654980-Firefly_Gemini_Flash_Create_a_website_hero_background_for_a_SaaS_product._Theme-_Sell_Your_Crops_at_the_Pr_307699.webp" },
     ],
     links: [
       {
@@ -83,16 +77,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isDashboard = pathname.startsWith("/dashboard");
-  const isLogin = pathname === "/login";
 
   return (
-    <AuthProvider>
-      {!isDashboard && !isLogin && <Navbar />}
-      <main className={!isDashboard && !isLogin ? "pt-16" : ""}>
+    <>
+      {!isDashboard && <Navbar />}
+      <main className={!isDashboard ? "pt-16" : ""}>
         <Outlet />
       </main>
-      {!isDashboard && !isLogin && <Footer />}
-      <Toaster />
-    </AuthProvider>
+      {!isDashboard && <Footer />}
+    </>
   );
 }
