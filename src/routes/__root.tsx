@@ -78,7 +78,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isApp = pathname.startsWith("/dashboard") || pathname.startsWith("/auth") || pathname.startsWith("/profile");
+  const isApp =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/listings") ||
+    pathname.startsWith("/requests") ||
+    pathname.startsWith("/favorites");
 
   return (
     <AuthProvider>
