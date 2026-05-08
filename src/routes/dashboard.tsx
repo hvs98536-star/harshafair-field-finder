@@ -133,7 +133,7 @@ function FarmerView() {
   };
   useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
 
-  const filteredReqs = useMemo(() => applyFilters(requests as any, filters), [requests, filters]);
+  const filteredReqs = useMemo(() => applyFilters(requests as any, filters) as RequestRow[], [requests, filters]);
 
   const myCropNames = new Set(listings.map((l) => l.crop_name.toLowerCase()));
   const matchedReqs = filteredReqs
@@ -277,7 +277,7 @@ function BuyerView() {
   };
   useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
 
-  const filtered = useMemo(() => applyFilters(listings as any, filters), [listings, filters]);
+  const filtered = useMemo(() => applyFilters(listings as any, filters) as Listing[], [listings, filters]);
 
   // Smart matching: score against each of buyer's open requests
   const scored = filtered.map((l) => {
