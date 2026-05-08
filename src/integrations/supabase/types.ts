@@ -24,8 +24,11 @@ export type Database = {
           location: string
           notes: string | null
           offer_price: string
+          price_numeric: number | null
           quantity_needed: string
+          quantity_numeric: number | null
           status: string
+          unit: string | null
           updated_at: string
         }
         Insert: {
@@ -37,8 +40,11 @@ export type Database = {
           location?: string
           notes?: string | null
           offer_price: string
+          price_numeric?: number | null
           quantity_needed: string
+          quantity_numeric?: number | null
           status?: string
+          unit?: string | null
           updated_at?: string
         }
         Update: {
@@ -50,8 +56,11 @@ export type Database = {
           location?: string
           notes?: string | null
           offer_price?: string
+          price_numeric?: number | null
           quantity_needed?: string
+          quantity_numeric?: number | null
           status?: string
+          unit?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -64,11 +73,15 @@ export type Database = {
           farmer_id: string
           id: string
           image_urls: string[]
+          is_organic: boolean
           location: string
           notes: string | null
           price: string
+          price_numeric: number | null
           quantity: string
+          quantity_numeric: number | null
           status: string
+          unit: string | null
           updated_at: string
         }
         Insert: {
@@ -78,11 +91,15 @@ export type Database = {
           farmer_id: string
           id?: string
           image_urls?: string[]
+          is_organic?: boolean
           location?: string
           notes?: string | null
           price: string
+          price_numeric?: number | null
           quantity: string
+          quantity_numeric?: number | null
           status?: string
+          unit?: string | null
           updated_at?: string
         }
         Update: {
@@ -92,11 +109,15 @@ export type Database = {
           farmer_id?: string
           id?: string
           image_urls?: string[]
+          is_organic?: boolean
           location?: string
           notes?: string | null
           price?: string
+          price_numeric?: number | null
           quantity?: string
+          quantity_numeric?: number | null
           status?: string
+          unit?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -108,6 +129,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          item_type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       offers: {
         Row: {
@@ -162,12 +207,14 @@ export type Database = {
       }
       profiles: {
         Row: {
+          bio: string | null
           business_name: string | null
           created_at: string
           district: string | null
           farming_type: string | null
           full_name: string
           id: string
+          is_verified: boolean
           location: string | null
           phone: string | null
           profile_image_url: string | null
@@ -176,12 +223,14 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          bio?: string | null
           business_name?: string | null
           created_at?: string
           district?: string | null
           farming_type?: string | null
           full_name?: string
           id: string
+          is_verified?: boolean
           location?: string | null
           phone?: string | null
           profile_image_url?: string | null
@@ -190,12 +239,14 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          bio?: string | null
           business_name?: string | null
           created_at?: string
           district?: string | null
           farming_type?: string | null
           full_name?: string
           id?: string
+          is_verified?: boolean
           location?: string | null
           phone?: string | null
           profile_image_url?: string | null
