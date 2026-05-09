@@ -84,7 +84,10 @@ function RootComponent() {
     pathname.startsWith("/profile") ||
     pathname.startsWith("/listings") ||
     pathname.startsWith("/requests") ||
-    pathname.startsWith("/favorites");
+    pathname.startsWith("/favorites") ||
+    pathname.startsWith("/messages") ||
+    pathname.startsWith("/notifications") ||
+    pathname.startsWith("/admin");
 
   return (
     <AuthProvider>

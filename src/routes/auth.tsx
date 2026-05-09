@@ -15,7 +15,7 @@ function AuthPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [mode, setMode] = useState<"signin" | "signup">("signup");
-  const [role, setRole] = useState<"farmer" | "buyer">("farmer");
+  const [role, setRole] = useState<"farmer" | "buyer" | "transporter" | "agent">("farmer");
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     full_name: "",
@@ -104,15 +104,20 @@ function AuthPage() {
             <>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">I am a</label>
-                <div className="flex gap-3">
-                  {(["farmer", "buyer"] as const).map((r) => (
+                <div className="grid grid-cols-2 gap-2">
+                  {([
+                    { r: "farmer", l: "🌾 Farmer" },
+                    { r: "buyer", l: "🛒 Buyer" },
+                    { r: "transporter", l: "🚚 Transporter" },
+                    { r: "agent", l: "🤝 Agent" },
+                  ] as const).map(({ r, l }) => (
                     <button
                       key={r}
                       type="button"
                       onClick={() => setRole(r)}
-                      className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-colors ${role === r ? "bg-primary text-primary-foreground border-primary" : "bg-background text-foreground border-input hover:border-primary/50"}`}
+                      className={`py-2.5 rounded-xl border text-sm font-medium transition-colors ${role === r ? "bg-primary text-primary-foreground border-primary" : "bg-background text-foreground border-input hover:border-primary/50"}`}
                     >
-                      {r === "farmer" ? "🌾 Farmer" : "🛒 Buyer"}
+                      {l}
                     </button>
                   ))}
                 </div>
