@@ -327,6 +327,14 @@ function BuyerView() {
 
   const filtered = useMemo(() => applyFilters(listings as any, filters) as Listing[], [listings, filters]);
 
+  const deleteRequest = async (id: string) => {
+    if (!confirm("Delete this request?")) return;
+    const { error } = await supabase.from("buyer_requests").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Request deleted");
+    setMyReqs((prev) => prev.filter((r) => r.id !== id));
+  };
+
   // Smart matching: score against each of buyer's open requests
   const scored = filtered.map((l) => {
     let best = 0;
@@ -387,7 +395,7 @@ function BuyerView() {
         <EmptyState icon={<HandCoins className="h-8 w-8" />} title="No requests yet" subtitle="Post a request and let farmers reach out to you." cta={<Button variant="hero" size="sm" onClick={() => setShowForm(true)}>Post request</Button>} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {myReqs.map((r) => <RequestCard key={r.id} r={r} mine />)}
+          {myReqs.map((r) => <RequestCard key={r.id} r={r} mine onDelete={() => deleteRequest(r.id)} />)}
         </div>
       )}
     </>
