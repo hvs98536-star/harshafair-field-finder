@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, MapPin, Calendar, Package, Sprout, Leaf, Loader2, User as UserIcon, Phone, MessageCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Package, Sprout, Leaf, Loader2, User as UserIcon, Phone, MessageCircle, Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +11,8 @@ import { MatchScore } from "@/components/MatchScore";
 import { calcMatchScore } from "@/lib/matching";
 import { pushRecent } from "@/lib/recentlyViewed";
 import { useAuth } from "@/hooks/useAuth";
+import { getOrCreateConversation } from "@/lib/messages";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/listings/$id")({
   head: () => ({ meta: [{ title: "Crop Listing — Farmora" }] }),
@@ -117,10 +119,20 @@ function ListingDetail() {
                   {farmer.bio && <p className="text-xs text-muted-foreground">{farmer.bio}</p>}
                   <ProfileCompleteness profile={farmer} />
                   {farmer.phone && (
-                    <div className="flex gap-2 pt-2">
+                    <div className="flex gap-2 pt-2 flex-wrap">
                       <Button asChild variant="outline" size="sm" className="flex-1"><a href={`tel:${farmer.phone}`}><Phone className="h-3.5 w-3.5 mr-1" /> Call</a></Button>
                       <Button asChild variant="hero" size="sm" className="flex-1"><a href={`https://wa.me/${farmer.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer"><MessageCircle className="h-3.5 w-3.5 mr-1" /> WhatsApp</a></Button>
                     </div>
+                  )}
+                  {user && user.id !== farmer.id && (
+                    <Button variant="outline" size="sm" className="w-full" onClick={async () => {
+                      try {
+                        const cid = await getOrCreateConversation(user.id, farmer.id);
+                        navigate({ to: "/messages/$id", params: { id: cid } });
+                      } catch (e: any) { toast.error(e.message); }
+                    }}>
+                      <Send className="h-3.5 w-3.5 mr-1" /> Message in app
+                    </Button>
                   )}
                 </CardContent>
               </Card>

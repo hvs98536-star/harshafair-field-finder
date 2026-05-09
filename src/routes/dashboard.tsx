@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Sprout, Plus, Package, HandCoins, MapPin, LogOut, Phone, MessageCircle, User as UserIcon, Loader2, X, Heart, Leaf, Trash2, ChevronDown, UserPlus } from "lucide-react";
+import { Sprout, Plus, Package, HandCoins, MapPin, LogOut, Phone, MessageCircle, User as UserIcon, Loader2, X, Heart, Leaf, Trash2, ChevronDown, UserPlus, ShieldCheck } from "lucide-react";
+import { NotificationBell } from "@/components/NotificationBell";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteMyAccount } from "@/lib/account.functions";
 import { Button } from "@/components/ui/button";
@@ -74,6 +75,11 @@ function DashboardPage() {
           <div className="flex items-center gap-2 relative">
             <span className="hidden sm:block text-sm text-muted-foreground mr-2">Hi, {profile.full_name || "there"}</span>
             <Button asChild variant="ghost" size="sm"><Link to="/favorites"><Heart className="h-4 w-4" /></Link></Button>
+            <Button asChild variant="ghost" size="sm"><Link to="/messages"><MessageCircle className="h-4 w-4" /></Link></Button>
+            <NotificationBell />
+            {profile.role === "admin" && (
+              <Button asChild variant="ghost" size="sm"><Link to="/admin"><ShieldCheck className="h-4 w-4" /></Link></Button>
+            )}
             <Button variant="ghost" size="sm" onClick={() => setMenuOpen((o) => !o)}>
               <UserIcon className="h-4 w-4" /> <ChevronDown className="h-3 w-3 ml-1" />
             </Button>
