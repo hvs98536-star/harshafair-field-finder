@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Sprout, Plus, Package, HandCoins, MapPin, LogOut, Phone, MessageCircle, User as UserIcon, Loader2, X, Heart, Leaf } from "lucide-react";
+import { Sprout, Plus, Package, HandCoins, MapPin, LogOut, Phone, MessageCircle, User as UserIcon, Loader2, X, Heart, Leaf, Trash2, ChevronDown, UserPlus } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { deleteMyAccount } from "@/lib/account.functions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
@@ -36,12 +38,28 @@ type ProfileLite = { id: string; full_name: string; phone: string; business_name
 function DashboardPage() {
   const { user, profile, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const callDelete = useServerFn(deleteMyAccount);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => { if (!loading && !user) navigate({ to: "/auth" }); }, [loading, user, navigate]);
 
   if (loading || !user || !profile) {
     return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
+
+  const handleLogout = async () => { await signOut(); navigate({ to: "/" }); };
+  const handleSwitch = async () => { await signOut(); navigate({ to: "/auth" }); };
+  const handleDeleteAccount = async () => {
+    if (!confirm("Permanently delete your account, listings and requests? This cannot be undone.")) return;
+    try {
+      await callDelete({ data: undefined as any });
+      await signOut();
+      toast.success("Account deleted");
+      navigate({ to: "/" });
+    } catch (e: any) {
+      toast.error(e?.message || "Could not delete account");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,10 +71,32 @@ function DashboardPage() {
             <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium capitalize">{profile.role}</span>
             {(profile as any).is_verified && <VerifiedBadge role={profile.role} className="ml-1" />}
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 relative">
             <span className="hidden sm:block text-sm text-muted-foreground mr-2">Hi, {profile.full_name || "there"}</span>
             <Button asChild variant="ghost" size="sm"><Link to="/favorites"><Heart className="h-4 w-4" /></Link></Button>
-            <Button variant="ghost" size="sm" onClick={async () => { await signOut(); navigate({ to: "/" }); }}><LogOut className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm" onClick={() => setMenuOpen((o) => !o)}>
+              <UserIcon className="h-4 w-4" /> <ChevronDown className="h-3 w-3 ml-1" />
+            </Button>
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                <div className="absolute right-0 top-12 z-50 w-56 rounded-xl border border-border bg-card shadow-lg overflow-hidden">
+                  <button onClick={() => { setMenuOpen(false); handleLogout(); }}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted text-left">
+                    <LogOut className="h-4 w-4" /> Logout
+                  </button>
+                  <button onClick={() => { setMenuOpen(false); handleSwitch(); }}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted text-left">
+                    <UserPlus className="h-4 w-4" /> Add / switch account
+                  </button>
+                  <div className="h-px bg-border" />
+                  <button onClick={() => { setMenuOpen(false); handleDeleteAccount(); }}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-destructive/10 text-destructive text-left">
+                    <Trash2 className="h-4 w-4" /> Delete account
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -133,6 +173,14 @@ function FarmerView() {
   };
   useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
 
+  const deleteListing = async (id: string) => {
+    if (!confirm("Delete this listing?")) return;
+    const { error } = await supabase.from("crop_listings").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Listing deleted");
+    setListings((prev) => prev.filter((l) => l.id !== id));
+  };
+
   const filteredReqs = useMemo(() => applyFilters(requests as any, filters) as RequestRow[], [requests, filters]);
 
   const myCropNames = new Set(listings.map((l) => l.crop_name.toLowerCase()));
@@ -172,7 +220,7 @@ function FarmerView() {
         <EmptyState icon={<Package className="h-8 w-8" />} title="No listings yet" subtitle="Post your first crop listing to get discovered by buyers." cta={<Button variant="hero" size="sm" onClick={() => setShowForm(true)}>Create listing</Button>} />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {listings.map((l) => <ListingCard key={l.id} l={l} />)}
+          {listings.map((l) => <ListingCard key={l.id} l={l} onDelete={() => deleteListing(l.id)} />)}
         </div>
       )}
 
