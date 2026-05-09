@@ -477,7 +477,7 @@ function EmptyState({ icon, title, subtitle, cta }: { icon: React.ReactNode; tit
   );
 }
 
-function ListingCard({ l, farmer, highlight, score }: { l: Listing; farmer?: ProfileLite; highlight?: boolean; score?: number }) {
+function ListingCard({ l, farmer, highlight, score, onDelete }: { l: Listing; farmer?: ProfileLite; highlight?: boolean; score?: number; onDelete?: () => void }) {
   return (
     <div className={`group relative rounded-xl border overflow-hidden bg-card transition-all hover:shadow-lg hover:-translate-y-0.5 ${highlight ? "border-primary/40 ring-2 ring-primary/20" : "border-border"}`}>
       <Link to="/listings/$id" params={{ id: l.id }} className="block">
@@ -513,11 +513,20 @@ function ListingCard({ l, farmer, highlight, score }: { l: Listing; farmer?: Pro
         </div>
       </Link>
       <FavoriteButton itemType="listing" itemId={l.id} className="absolute top-2 right-2" />
+      {onDelete && (
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
+          aria-label="Delete listing"
+          className="absolute top-2 right-12 rounded-full bg-background/90 border border-border p-1.5 text-destructive hover:bg-destructive hover:text-destructive-foreground transition"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }
 
-function RequestCard({ r, buyer, mine, score }: { r: RequestRow; buyer?: ProfileLite; mine?: boolean; score?: number }) {
+function RequestCard({ r, buyer, mine, score, onDelete }: { r: RequestRow; buyer?: ProfileLite; mine?: boolean; score?: number; onDelete?: () => void }) {
   return (
     <div className="group relative rounded-xl border border-border overflow-hidden bg-card transition-all hover:shadow-lg hover:-translate-y-0.5">
       <Link to="/requests/$id" params={{ id: r.id }} className="block">
@@ -553,6 +562,15 @@ function RequestCard({ r, buyer, mine, score }: { r: RequestRow; buyer?: Profile
         </div>
       </Link>
       {!mine && <FavoriteButton itemType="request" itemId={r.id} className="absolute top-2 right-2" />}
+      {mine && onDelete && (
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
+          aria-label="Delete request"
+          className="absolute top-2 right-2 rounded-full bg-background/90 border border-border p-1.5 text-destructive hover:bg-destructive hover:text-destructive-foreground transition"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }
