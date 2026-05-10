@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, MapPin, Phone, Mail, ShieldCheck, Sprout, ShoppingCart, Truck, Handshake, Package, Calendar } from "lucide-react";
+import { ArrowLeft, MapPin, Phone, MessageCircle, ShieldCheck, Sprout, ShoppingCart, Truck, Handshake, Package, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { getOrCreateConversation } from "@/lib/messages";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/u/$id")({
   head: () => ({ meta: [{ title: "Profile — Farmora" }] }),
@@ -20,10 +22,31 @@ const ROLE_META: Record<string, { label: string; Icon: any; color: string }> = {
 function PublicProfile() {
   const { id } = Route.useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [listings, setListings] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [chatLoading, setChatLoading] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      navigate({ to: "/auth" });
+    }
+  }, [user, navigate]);
+
+  const startChat = async () => {
+    if (!user || !profile) return;
+    try {
+      setChatLoading(true);
+      const cid = await getOrCreateConversation(user.id, profile.id);
+      navigate({ to: "/messages/$id", params: { id: cid } });
+    } catch (e: any) {
+      toast.error(e.message ?? "Could not start chat");
+    } finally {
+      setChatLoading(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -106,21 +129,25 @@ function PublicProfile() {
               )}
               {profile.bio && <p className="mt-3 text-sm text-foreground">{profile.bio}</p>}
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              {profile.phone && (
+                <div className="mt-4 inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 text-primary font-semibold text-sm">
+                  <Phone className="h-4 w-4" /> {profile.phone}
+                </div>
+              )}
+              <div className="mt-3 flex flex-wrap gap-2">
                 {profile.phone && (
                   <a href={`tel:${profile.phone}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-sm hover:bg-muted">
-                    <Phone className="h-4 w-4" /> {profile.phone}
+                    <Phone className="h-4 w-4" /> Call
                   </a>
                 )}
                 {user && !isOwn && (
-                  <Link to="/messages" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90">
-                    <Mail className="h-4 w-4" /> Message
-                  </Link>
-                )}
-                {!user && (
-                  <Link to="/auth" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90">
-                    Sign in to contact
-                  </Link>
+                  <button
+                    onClick={startChat}
+                    disabled={chatLoading}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-60"
+                  >
+                    <MessageCircle className="h-4 w-4" /> {chatLoading ? "Opening…" : "Message"}
+                  </button>
                 )}
               </div>
             </div>
