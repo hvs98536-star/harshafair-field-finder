@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Search, MapPin, Sprout, ShoppingCart, Truck, Handshake, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,6 +41,8 @@ const CATEGORIES: { key: Category; label: string; icon: any; color: string }[] =
 ];
 
 function Directory() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [profiles, setProfiles] = useState<ProfileRow[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -152,7 +156,19 @@ function Directory() {
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filtered.map((p) => (
-              <ProfileCard key={p.id} p={p} listingCount={counts[p.id] ?? 0} />
+              <ProfileCard
+                key={p.id}
+                p={p}
+                listingCount={counts[p.id] ?? 0}
+                onOpen={(id) => {
+                  if (!user) {
+                    toast.info("Please sign in to view this profile");
+                    navigate({ to: "/auth" });
+                  } else {
+                    navigate({ to: "/u/$id", params: { id } });
+                  }
+                }}
+              />
             ))}
           </div>
         )}
@@ -161,17 +177,17 @@ function Directory() {
   );
 }
 
-function ProfileCard({ p, listingCount }: { p: ProfileRow; listingCount: number }) {
+function ProfileCard({ p, listingCount, onOpen }: { p: ProfileRow; listingCount: number; onOpen: (id: string) => void }) {
   const cat = CATEGORIES.find((c) => c.key === p.role) ?? CATEGORIES[0];
   const Icon = cat.icon;
   const initials = (p.full_name || "U").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   const place = [p.location, p.district, p.state].filter(Boolean).join(", ");
 
   return (
-    <Link
-      to="/u/$id"
-      params={{ id: p.id }}
-      className="group block rounded-2xl border border-border bg-card p-4 hover:border-primary/50 hover:shadow-md transition-all"
+    <button
+      type="button"
+      onClick={() => onOpen(p.id)}
+      className="group block w-full text-left rounded-2xl border border-border bg-card p-4 hover:border-primary/50 hover:shadow-md transition-all"
     >
       <div className="flex items-start gap-3">
         {p.profile_image_url ? (
@@ -209,6 +225,6 @@ function ProfileCard({ p, listingCount }: { p: ProfileRow; listingCount: number 
         </span>
         <span className="text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">View →</span>
       </div>
-    </Link>
+    </button>
   );
 }
