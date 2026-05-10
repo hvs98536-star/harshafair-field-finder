@@ -147,6 +147,11 @@
 
   body {
     background-color: var(--color-background);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, color-mix(in oklab, var(--farm-green) 14%, transparent), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 100% 10%, color-mix(in oklab, var(--farm-gold) 18%, transparent), transparent 60%),
+      linear-gradient(180deg, var(--farm-cream), var(--background) 40%);
+    background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-body);
   }
