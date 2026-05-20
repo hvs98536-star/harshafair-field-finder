@@ -10,6 +10,32 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Farmora — Discover Farmers, Buyers, Agents & Transporters" },
       { name: "description", content: "Browse public profiles of farmers, buyers, agents and transporters. No login required." },
+      { property: "og:title", content: "Farmora — Farmer & Buyer Directory" },
+      { property: "og:description", content: "Browse public profiles of farmers, buyers, agents and transporters across regions. No login required." },
+      { property: "og:url", content: "https://harshafair-field-finder.lovable.app/" },
+      { property: "og:type", content: "website" },
+    ],
+    links: [{ rel: "canonical", href: "https://harshafair-field-finder.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Farmora",
+          url: "https://harshafair-field-finder.lovable.app/",
+          description: "Public directory of farmers, buyers, agents and transporters.",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Farmora",
+          url: "https://harshafair-field-finder.lovable.app/",
+        }),
+      },
     ],
   }),
   component: Directory,
@@ -98,6 +124,7 @@ function Directory() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
+                aria-label="Search profiles by name, crop or business"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search name, crop, business..."
@@ -107,6 +134,7 @@ function Directory() {
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
+                aria-label="Filter profiles by location, district or state"
                 value={loc}
                 onChange={(e) => setLoc(e.target.value)}
                 placeholder="Filter by location, district, state"
@@ -139,6 +167,7 @@ function Directory() {
 
       {/* Grid */}
       <section className="max-w-7xl mx-auto px-4 py-10">
+        <h2 className="sr-only">Profiles</h2>
         {loading ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (

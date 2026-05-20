@@ -69,16 +69,16 @@ function ChatPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border bg-card sticky top-0 z-30">
         <div className="max-w-3xl mx-auto flex items-center gap-3 px-4 h-16">
-          <Button variant="ghost" size="sm" onClick={() => navigate({ to: "/messages" })}><ArrowLeft className="h-4 w-4" /></Button>
+          <Button variant="ghost" size="sm" aria-label="Back to conversations" onClick={() => navigate({ to: "/messages" })}><ArrowLeft className="h-4 w-4" /></Button>
           <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden flex-shrink-0">
-            {other?.profile_image_url ? <img src={other.profile_image_url} className="h-full w-full object-cover" /> : (other?.full_name?.[0] || "?").toUpperCase()}
+            {other?.profile_image_url ? <img src={other.profile_image_url} alt={`${other?.full_name || "Contact"} profile picture`} className="h-full w-full object-cover" /> : (other?.full_name?.[0] || "?").toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-semibold truncate">{other?.full_name || "Loading…"}</p>
+            <h1 className="font-semibold truncate text-base">Chat with {other?.full_name || "…"}</h1>
             <p className="text-xs text-muted-foreground capitalize">{other?.role}</p>
           </div>
           {other?.phone && (
-            <Button asChild variant="outline" size="sm"><a href={`tel:${other.phone}`}><Phone className="h-4 w-4" /></a></Button>
+            <Button asChild variant="outline" size="sm"><a href={`tel:${other.phone}`} aria-label={`Call ${other.full_name || "contact"}`}><Phone className="h-4 w-4" /></a></Button>
           )}
         </div>
       </header>
@@ -106,13 +106,16 @@ function ChatPage() {
 
       <form onSubmit={send} className="border-t border-border bg-card p-3 sticky bottom-0">
         <div className="max-w-3xl mx-auto flex gap-2">
+          <label htmlFor="chat-message-input" className="sr-only">Message</label>
           <input
+            id="chat-message-input"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Type a message…"
+            aria-label="Type a message"
             className="flex-1 rounded-full border border-input bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
-          <Button type="submit" variant="hero" size="sm" disabled={sending || !text.trim()}>
+          <Button type="submit" variant="hero" size="sm" aria-label="Send message" disabled={sending || !text.trim()}>
             {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>

@@ -15,7 +15,19 @@ import { getOrCreateConversation } from "@/lib/messages";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/listings/$id")({
-  head: () => ({ meta: [{ title: "Crop Listing — Farmora" }] }),
+  head: ({ params }) => ({
+    meta: [
+      { title: "Crop Listing — Farmora" },
+      { name: "description", content: "View this crop listing on Farmora — quantity, price, location, and seller details. Contact the farmer directly." },
+      { property: "og:title", content: "Crop Listing — Farmora" },
+      { property: "og:description", content: "View crop details, price and seller info on Farmora." },
+      { property: "og:url", content: `https://harshafair-field-finder.lovable.app/listings/${params.id}` },
+      { property: "og:type", content: "product" },
+    ],
+    links: [
+      { rel: "canonical", href: `https://harshafair-field-finder.lovable.app/listings/${params.id}` },
+    ],
+  }),
   component: ListingDetail,
 });
 
@@ -51,6 +63,19 @@ function ListingDetail() {
   if (!listing) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Listing not found.</div>;
 
   const images: string[] = listing.image_urls?.length ? listing.image_urls : [];
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: listing.crop_name,
+    description: listing.notes || `${listing.crop_name} available from a farmer on Farmora.`,
+    image: images,
+    offers: {
+      "@type": "Offer",
+      price: listing.price_numeric ?? undefined,
+      priceCurrency: "INR",
+      availability: "https://schema.org/InStock",
+    },
+  };
   const myReqs: any[] = []; // could fetch buyer requests for score
   const score = profile?.role === "buyer" ? calcMatchScore({
     cropA: listing.crop_name, cropB: listing.crop_name,
@@ -61,6 +86,7 @@ function ListingDetail() {
 
   return (
     <div className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Button variant="ghost" size="sm" onClick={() => navigate({ to: "/dashboard" })}>
           <ArrowLeft className="h-4 w-4" /> Back
@@ -80,8 +106,8 @@ function ListingDetail() {
             {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
                 {images.map((u, i) => (
-                  <button key={i} onClick={() => setActive(i)} className={`h-20 w-20 rounded-lg overflow-hidden flex-shrink-0 border-2 ${i === active ? "border-primary" : "border-transparent"}`}>
-                    <img src={u} className="h-full w-full object-cover" />
+                  <button key={i} onClick={() => setActive(i)} aria-label={`Show image ${i + 1} of ${listing.crop_name}`} className={`h-20 w-20 rounded-lg overflow-hidden flex-shrink-0 border-2 ${i === active ? "border-primary" : "border-transparent"}`}>
+                    <img src={u} alt={`${listing.crop_name} photo ${i + 1}`} className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -108,7 +134,7 @@ function ListingDetail() {
                 <CardContent className="pt-5 space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                      {farmer.profile_image_url ? <img src={farmer.profile_image_url} className="h-full w-full rounded-full object-cover" /> : <UserIcon className="h-6 w-6" />}
+                      {farmer.profile_image_url ? <img src={farmer.profile_image_url} alt={`${farmer.full_name || "Farmer"} profile picture`} className="h-full w-full rounded-full object-cover" /> : <UserIcon className="h-6 w-6" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold truncate">{farmer.full_name || "Farmer"}</p>
@@ -146,7 +172,7 @@ function ListingDetail() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {related.map((r) => (
                 <Link key={r.id} to="/listings/$id" params={{ id: r.id }} className="block rounded-xl overflow-hidden border border-border hover:shadow-md transition">
-                  {r.image_urls?.[0] ? <img src={r.image_urls[0]} className="h-24 w-full object-cover" /> : <div className="h-24 bg-muted flex items-center justify-center text-3xl">🌾</div>}
+                  {r.image_urls?.[0] ? <img src={r.image_urls[0]} alt={r.crop_name} className="h-24 w-full object-cover" /> : <div className="h-24 bg-muted flex items-center justify-center text-3xl">🌾</div>}
                   <div className="p-2">
                     <p className="text-xs font-medium truncate">{r.crop_name}</p>
                     <p className="text-xs text-primary font-semibold truncate">{r.price}</p>

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as FavoritesRouteImport } from './routes/favorites'
@@ -21,6 +22,11 @@ import { Route as RequestsIdRouteImport } from './routes/requests.$id'
 import { Route as MessagesIdRouteImport } from './routes/messages.$id'
 import { Route as ListingsIdRouteImport } from './routes/listings.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof FavoritesRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/listings/$id': typeof ListingsIdRoute
   '/messages/$id': typeof MessagesIdRoute
   '/requests/$id': typeof RequestsIdRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/favorites': typeof FavoritesRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/listings/$id': typeof ListingsIdRoute
   '/messages/$id': typeof MessagesIdRoute
   '/requests/$id': typeof RequestsIdRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/favorites': typeof FavoritesRoute
   '/messages': typeof MessagesRouteWithChildren
   '/notifications': typeof NotificationsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/listings/$id': typeof ListingsIdRoute
   '/messages/$id': typeof MessagesIdRoute
   '/requests/$id': typeof RequestsIdRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/messages'
     | '/notifications'
+    | '/sitemap.xml'
     | '/listings/$id'
     | '/messages/$id'
     | '/requests/$id'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/messages'
     | '/notifications'
+    | '/sitemap.xml'
     | '/listings/$id'
     | '/messages/$id'
     | '/requests/$id'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/messages'
     | '/notifications'
+    | '/sitemap.xml'
     | '/listings/$id'
     | '/messages/$id'
     | '/requests/$id'
@@ -167,6 +179,7 @@ export interface RootRouteChildren {
   FavoritesRoute: typeof FavoritesRoute
   MessagesRoute: typeof MessagesRouteWithChildren
   NotificationsRoute: typeof NotificationsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ListingsIdRoute: typeof ListingsIdRoute
   RequestsIdRoute: typeof RequestsIdRoute
   UIdRoute: typeof UIdRoute
@@ -174,6 +187,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications': {
       id: '/notifications'
       path: '/notifications'
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   FavoritesRoute: FavoritesRoute,
   MessagesRoute: MessagesRouteWithChildren,
   NotificationsRoute: NotificationsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ListingsIdRoute: ListingsIdRoute,
   RequestsIdRoute: RequestsIdRoute,
   UIdRoute: UIdRoute,

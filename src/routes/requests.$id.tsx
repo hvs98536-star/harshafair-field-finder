@@ -57,14 +57,14 @@ function RequestDetail() {
         <div className="grid lg:grid-cols-5 gap-8 mt-4">
           <div className="lg:col-span-3 space-y-3">
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-accent/20 to-primary/10 flex items-center justify-center">
-              {images[active] ? <img src={images[active]} className="h-full w-full object-cover" /> : <span className="text-7xl">🛒</span>}
+              {images[active] ? <img src={images[active]} alt={req.crop_name} className="h-full w-full object-cover" /> : <span className="text-7xl">🛒</span>}
               <FavoriteButton itemType="request" itemId={req.id} className="absolute top-3 right-3" />
             </div>
             {images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
                 {images.map((u, i) => (
                   <button key={i} onClick={() => setActive(i)} className={`h-20 w-20 rounded-lg overflow-hidden flex-shrink-0 border-2 ${i === active ? "border-primary" : "border-transparent"}`}>
-                    <img src={u} className="h-full w-full object-cover" />
+                    <img src={u} alt={`${req.crop_name} request photo`} className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -88,7 +88,7 @@ function RequestDetail() {
                 <CardContent className="pt-5 space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                      {buyer.profile_image_url ? <img src={buyer.profile_image_url} className="h-full w-full rounded-full object-cover" /> : <UserIcon className="h-6 w-6" />}
+                      {buyer.profile_image_url ? <img src={buyer.profile_image_url} alt={`${buyer.full_name || "Buyer"} profile picture`} className="h-full w-full rounded-full object-cover" /> : <UserIcon className="h-6 w-6" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold truncate">{buyer.business_name || buyer.full_name}</p>
@@ -126,7 +126,7 @@ function RequestDetail() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               {related.map((r) => (
                 <Link key={r.id} to="/listings/$id" params={{ id: r.id }} className="block rounded-xl overflow-hidden border border-border hover:shadow-md transition">
-                  {r.image_urls?.[0] ? <img src={r.image_urls[0]} className="h-24 w-full object-cover" /> : <div className="h-24 bg-muted flex items-center justify-center text-3xl">🌾</div>}
+                  {r.image_urls?.[0] ? <img src={r.image_urls[0]} alt={r.crop_name} className="h-24 w-full object-cover" /> : <div className="h-24 bg-muted flex items-center justify-center text-3xl">🌾</div>}
                   <div className="p-2">
                     <p className="text-xs font-medium truncate">{r.crop_name}</p>
                     <p className="text-xs text-primary font-semibold truncate">{r.price}</p>
