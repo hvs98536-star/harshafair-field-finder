@@ -33,14 +33,13 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Farmora — Farmer & Buyer Marketplace" },
+      { name: "description", content: "Farmora connects farmers, buyers, agents and transporters. Browse public profiles, list crops, post buyer requests, and message in-app." },
+      { property: "og:title", content: "Farmora — Farmer & Buyer Marketplace" },
+      { property: "og:description", content: "Discover farmers, buyers, agents and transporters. Trade crops directly with verified profiles and in-app messaging." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:site_name", content: "Farmora" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       {
