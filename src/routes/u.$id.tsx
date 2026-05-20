@@ -7,7 +7,19 @@ import { getOrCreateConversation } from "@/lib/messages";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/u/$id")({
-  head: () => ({ meta: [{ title: "Profile — Farmora" }] }),
+  head: ({ params }) => ({
+    meta: [
+      { title: "Profile — Farmora" },
+      { name: "description", content: "Public profile on Farmora — view listings, requests, location and contact details to connect directly." },
+      { property: "og:title", content: "Profile — Farmora" },
+      { property: "og:description", content: "View this Farmora member's profile, listings and contact details." },
+      { property: "og:url", content: `https://harshafair-field-finder.lovable.app/u/${params.id}` },
+      { property: "og:type", content: "profile" },
+    ],
+    links: [
+      { rel: "canonical", href: `https://harshafair-field-finder.lovable.app/u/${params.id}` },
+    ],
+  }),
   component: PublicProfile,
 });
 
@@ -83,9 +95,21 @@ function PublicProfile() {
   const isOwn = user?.id === profile.id;
   const showItems = profile.role === "buyer" ? requests : listings;
   const itemKind = profile.role === "buyer" ? "request" : "listing";
+  const profileJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    mainEntity: {
+      "@type": "Person",
+      name: profile.full_name || "Farmora member",
+      jobTitle: meta.label,
+      address: place || undefined,
+      telephone: profile.phone || undefined,
+    },
+  };
 
   return (
     <div className="min-h-screen bg-background">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }} />
       <div className="border-b border-border bg-card">
         <div className="max-w-5xl mx-auto px-4 py-3">
           <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
@@ -98,7 +122,7 @@ function PublicProfile() {
         <div className="bg-card rounded-2xl border border-border p-6 md:p-8">
           <div className="flex flex-col md:flex-row gap-6 items-start">
             {profile.profile_image_url ? (
-              <img src={profile.profile_image_url} alt={profile.full_name} className="h-24 w-24 rounded-full object-cover" />
+              <img src={profile.profile_image_url} alt={`${profile.full_name || "Profile"} picture`} className="h-24 w-24 rounded-full object-cover" />
             ) : (
               <div className="h-24 w-24 rounded-full bg-primary/15 text-primary text-2xl flex items-center justify-center font-bold">
                 {initials}
