@@ -1,0 +1,7 @@
+# Farmora
+
+> Farmora is a public marketplace connecting farmers, buyers, agents and transporters. Browse public profiles, see crop listings and buyer requests, and contact people directly.
+
+## Pages
+
+- [Home / Directory](/): Browse all registered farmers, buyers, agents and transporters by category and location.
