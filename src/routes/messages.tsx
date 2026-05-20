@@ -77,7 +77,7 @@ function MessagesPage() {
               return (
                 <Link key={c.id} to="/messages/$id" params={{ id: c.id }} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-muted/40 transition">
                   <div className="h-11 w-11 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold flex-shrink-0 overflow-hidden">
-                    {p?.profile_image_url ? <img src={p.profile_image_url} className="h-full w-full object-cover" /> : (p?.full_name?.[0] || "?").toUpperCase()}
+                    {p?.profile_image_url ? <img src={p.profile_image_url} alt={`${p?.full_name || "Contact"} profile picture`} className="h-full w-full object-cover" /> : (p?.full_name?.[0] || "?").toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{p?.full_name || "User"}</p>
