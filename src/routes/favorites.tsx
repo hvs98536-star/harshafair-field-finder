@@ -98,7 +98,7 @@ function Section({ title, items, type }: { title: string; items: any[]; type: "l
             className="block rounded-xl overflow-hidden border border-border hover:shadow-md transition"
           >
             {it.image_urls?.[0]
-              ? <img src={it.image_urls[0]} className="h-32 w-full object-cover" />
+              ? <img src={it.image_urls[0]} alt={it.crop_name || "Saved item"} className="h-32 w-full object-cover" />
               : <div className="h-32 bg-muted flex items-center justify-center text-4xl">{type === "listing" ? "🌾" : "🛒"}</div>}
             <div className="p-3">
               <p className="text-sm font-medium truncate">{it.crop_name}</p>
